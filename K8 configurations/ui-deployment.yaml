@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-ui-deployment 
+  labels:
+    app: app-ui # this links service and deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-ui # this matches pods with deployment
+  template:
+    metadata:
+      labels:
+        app: app-ui # this reference for pod so that it gets identified by deployment
+    spec:
+      containers:
+      - name: app-ui
+        image: ysreddy99/app-ui
+        ports:
+        - containerPort: 27017
+
+
+

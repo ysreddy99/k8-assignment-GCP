@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-configmap
+  labels:
+    app: app-api
+data:
+  colletion-name: Cities
+  db-name: Cities
+  host: mongodb-service

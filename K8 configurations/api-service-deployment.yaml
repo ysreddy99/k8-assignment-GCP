@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment 
+  labels:
+    app: app-api # this links service and deployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: app-api # this matches pods with deployment
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 3
+  template:
+    metadata:
+      labels:
+        app: app-api # this reference for pod so that it gets identified by deployment
+    spec:
+      containers:
+      - name: app-api
+        image: ysreddy99/api-service
+        resources:
+          
+        ports:
+        - containerPort: 5111
+        env:
+        - name: host
+          valueFrom:
+            configMapKeyRef:
+              name: api-configmap
+              key: host
+        - name: db-name
+          valueFrom:
+            configMapKeyRef:
+              name:  api-configmap
+              key: db-name
+        - name: colletion-name
+          valueFrom:
+            configMapKeyRef:
+              name:  api-configmap
+              key: colletion-name
+        - name: password
+          valueFrom:
+            secretKeyRef:
+              name:  mongo-secret
+              key: password
+        - name: username
+          valueFrom:
+            secretKeyRef:
+              name:  mongo-secret
+              key: username
+
+
+

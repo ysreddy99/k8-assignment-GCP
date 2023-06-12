@@ -1,0 +1,19 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+
+services:
+  apiservice:
+    image: apiservice
+    build:
+      context: .
+      dockerfile: APIService/APIService/Dockerfile
+    ports:
+      - 5111:5111
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString = mongodb://mongodb:27017;
+      - DBName=Cities
+      - ColletionName=Cities
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw

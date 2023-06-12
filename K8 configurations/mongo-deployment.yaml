@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment # this links service and deployment
+  labels:
+    app: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb # this matches pods with deployment
+  template:
+    metadata:
+      labels:
+        app: mongodb # this reference for pod so that it gets identified by deployment
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:latest
+        resources:
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+          - name:  db-disk
+            mountPath:  /data/db
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name:  mongo-secret
+              key: username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name:  mongo-secret
+              key: password
+        - name: ME_CONFIG_MONGODB_SERVER
+          value: mongo
+      volumes:
+        - name:  db-disk
+          persistentVolumeClaim:
+            claimName: mongo-pvc
+
+
